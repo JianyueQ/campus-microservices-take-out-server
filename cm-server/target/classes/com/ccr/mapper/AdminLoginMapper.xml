@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ccr.mapper.AdminLoginMapper">
+
+    <sql id="BaseResult">
+        select id, username, password, real_name, phone, email, avatar, gender, status, user_type, create_time, update_time, create_user, update_user, is_deleted
+        from user
+    </sql>
+
+    <select id="getAdminByUser" resultType="com.ccr.entity.User">
+        <include refid="BaseResult"/>
+        <where>
+            <if test="username != null and username != ''">and username = #{username} </if>
+            and user_type = 3 and is_deleted = 0
+        </where>
+    </select>
+</mapper>

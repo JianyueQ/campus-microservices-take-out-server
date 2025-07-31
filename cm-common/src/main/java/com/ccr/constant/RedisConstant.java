@@ -1,0 +1,19 @@
+package com.ccr.constant;
+
+/**
+ * Redis常量
+ * @author 31373
+ */
+public class RedisConstant {
+
+    public static final String REDIS_KEY_CODE = "verify:code:";
+
+    public static final long CODE_EXPIRE_TIME = 5;
+    public static final String JWT_TOKEN_KEY = "jwt:token:";
+    public static final long TOKEN_TTL = 2;
+    public static final Object HASH_KEY_SUPER_ADMIN = "superAdmin";
+    public static final String JWT_ID_KEY = "user:info:";
+    public static final String ADMIN_LOGIN_ERROR_COUNT_KEY = "admin:login:error:count:";
+    public static final long ADMIN_LOGIN_ERROR_COUNT_TIME = 5;
+    public static final long ADMIN_LOGIN_ERROR_COUNT = 1;
+}

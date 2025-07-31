@@ -1,0 +1,88 @@
+{
+  "groups": [
+    {
+      "name": "ccr.alioss",
+      "type": "com.ccr.properties.AliOssProperties",
+      "sourceType": "com.ccr.properties.AliOssProperties"
+    },
+    {
+      "name": "ccr.jwt",
+      "type": "com.ccr.properties.JwtProperties",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "ccr.alioss.access-key-id",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.AliOssProperties"
+    },
+    {
+      "name": "ccr.alioss.access-key-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.AliOssProperties"
+    },
+    {
+      "name": "ccr.alioss.bucket-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.AliOssProperties"
+    },
+    {
+      "name": "ccr.alioss.endpoint",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.AliOssProperties"
+    },
+    {
+      "name": "ccr.jwt.admin-secret-key",
+      "type": "java.lang.String",
+      "description": "管理端员工生成jwt令牌相关配置",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.admin-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.admin-ttl",
+      "type": "java.lang.Long",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.teacher-secret-key",
+      "type": "java.lang.String",
+      "description": "教师端生成jwt令牌相关配置",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.teacher-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.teacher-ttl",
+      "type": "java.lang.Long",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.user-secret-key",
+      "type": "java.lang.String",
+      "description": "用户端用户生成jwt令牌相关配置",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.user-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    },
+    {
+      "name": "ccr.jwt.user-ttl",
+      "type": "java.lang.Long",
+      "sourceType": "com.ccr.properties.JwtProperties"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}
