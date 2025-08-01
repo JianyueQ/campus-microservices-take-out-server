@@ -25,4 +25,6 @@ public class SystemController {
     public Result<ServiceMonitoringVO> getServer(){
         return Result.success(systemService.getServer());
     }
+
+
 }

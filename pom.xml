@@ -147,6 +147,7 @@
                 <version>${oshi}</version>
             </dependency>
 
+
         </dependencies>
     </dependencyManagement>
 </project>
