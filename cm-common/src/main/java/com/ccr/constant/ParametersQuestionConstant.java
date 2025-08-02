@@ -5,6 +5,9 @@ package com.ccr.constant;
  */
 public class ParametersQuestionConstant {
 
+    /**
+     * 基本资料
+     */
     public static final String EMAIL_NOT_NULL = "邮箱地址不能为空";
     public static final String EMAIL_ERROR = "邮件格式错误";
     public static final String PHONE_NOT_NULL = "手机号不能为空";
@@ -19,4 +22,13 @@ public class ParametersQuestionConstant {
     public static final String NEW_PASSWORD_SAME_AS_RE_PASSWORD = "新密码与确认密码不相同";
     public static final String NEW_PASSWORD_SAME_AS_OLD_PASSWORD = "新密码不能与旧密码相同";
     public static final String PASSWORD_ERROR = "旧密码错误";
+
+    /**
+     * 公告
+     */
+    public static final String TITLE_NOT_NULL = "公告标题不能为空";
+    public static final String CONTENT_NOT_NULL = "公告内容不能为空";
+    public static final String ANNOUNCEMENT_STATUS_NOT_NULL = "公告状态不能为空";
+    public static final String ANNOUNCEMENT_TYPE_NOT_NULL = "公告类型不能为空";
+    public static final String PRIORITY_NOT_NULL = "公告优先级不能为空";
 }

@@ -16,4 +16,6 @@ public class RedisConstant {
     public static final String ADMIN_LOGIN_ERROR_COUNT_KEY = "admin:login:error:count:";
     public static final long ADMIN_LOGIN_ERROR_COUNT_TIME = 5;
     public static final long ADMIN_LOGIN_ERROR_COUNT = 1;
+    public static final String ANNOUNCEMENT_READ_COUNT = "announcement:read:count:";
+    public static final long ANNOUNCEMENT_READ_COUNT_INCREASE = 1;
 }

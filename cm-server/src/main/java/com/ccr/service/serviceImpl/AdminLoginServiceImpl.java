@@ -137,6 +137,7 @@ public class AdminLoginServiceImpl implements AdminLoginService {
         map.put(MapConstant.USER_TYPE, String.valueOf(user.getUserType()));
         map.put(MapConstant.STATUS, String.valueOf(user.getStatus()));
         map.put(MapConstant.USER_TOKEN, token);
+        map.put(MapConstant.REAL_NAME, user.getRealName());
         //如果id=1,username=admin,就标识为超级管理员
         if (user.getId().equals(TypeConstant.SUPER_ADMIN) && user.getUsername().equals(TypeConstant.ADMIN)){
             map.put(MapConstant.SUPER_ADMIN, String.valueOf(true));
