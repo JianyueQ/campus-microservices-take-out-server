@@ -3,11 +3,33 @@
 <mapper namespace="com.ccr.mapper.AdminLoginMapper">
 
     <sql id="BaseResult">
-        select id, username, password, real_name, phone, email, avatar, gender, status, user_type, create_time, update_time, create_user, update_user, is_deleted
+        select id, username, password, real_name, status, user_type
         from user
     </sql>
 
-    <select id="getAdminByUser" resultType="com.ccr.entity.User">
+    <resultMap id="BaseResultMap" type="com.ccr.entity.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="real_name" property="realName" />
+        <result column="status" property="status" />
+        <result column="user_type" property="userType" />
+        <association property="admin" column="id" javaType="admin" select="getAdminInfoByUserId"/>
+    </resultMap>
+
+    <select id="getAdminByUser" resultMap="BaseResultMap">
+        <include refid="BaseResult"/>
+        <where>
+            <if test="username != null and username != ''">and username = #{username} </if>
+            and user_type = 3 and is_deleted = 0
+        </where>
+    </select>
+
+    <select id="getAdminInfoByUserId" resultType="Admin">
+        select position from admin where user_id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="getAdminByUsername" resultType="com.ccr.entity.User">
         <include refid="BaseResult"/>
         <where>
             <if test="username != null and username != ''">and username = #{username} </if>

@@ -14,4 +14,11 @@ public interface AdminLoginMapper {
      * @return 用户信息
      */
     User getAdminByUser(User user);
+
+    /**
+     * 根据用户名获取用户信息
+     * @param username 用户名
+     * @return 用户信息
+     */
+    User getAdminByUsername(String username);
 }

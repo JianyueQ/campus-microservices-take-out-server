@@ -189,7 +189,7 @@ public class RedisCacheAspect {
                         StringBuilder itemBuilder = new StringBuilder(keyBuilder);
 //                        itemBuilder.append(item != null ? item.toString() : "null").append("_");
                         if (item != null) {
-                            itemBuilder.append(":").append(item.toString());
+                            itemBuilder.append(item.toString()).append("_");
                         } else {
                             itemBuilder.append(":null");
                         }
@@ -197,17 +197,17 @@ public class RedisCacheAspect {
                     }
                 } else {
                     // 拼接key
-//                    keyBuilder.append(value != null ? value.toString() : "null").append("_");
-                    // 只拼接非空值
-                    if (value != null && !value.toString().isEmpty() && !value.toString().equals("null")) {
-                        // 拼接key
-                        keyBuilder.append(value.toString()).append("_");
-                    }
+                    keyBuilder.append(value != null ? value.toString() : "null").append("_");
                 }
             }
 
             // 如果没有生成基于集合的键，则添加单个键
             if (cacheKeys.isEmpty()) {
+//                cacheKeys.add(keyBuilder.toString());
+                //去除结尾的下划线
+                if (!keyBuilder.isEmpty() && keyBuilder.charAt(keyBuilder.length() - 1) == '_') {
+                    keyBuilder.deleteCharAt(keyBuilder.length() - 1);
+                }
                 cacheKeys.add(keyBuilder.toString());
             }
         } else {
@@ -280,12 +280,12 @@ public class RedisCacheAspect {
                 //获取key
                 Object value = expression.getValue(context);
                 //拼接key
-//                keyBuilder.append(value != null ? value.toString() : "null").append("_");
-                //只拼接非空值
-                if (value != null && !value.toString().isEmpty() && !value.toString().equals("null")) {
-                    keyBuilder.append(value.toString()).append("_");
-                }
+                keyBuilder.append(value != null ? value.toString() : "null").append("_");
             }
+        }
+        //去除结尾的下划线
+        if (!keyBuilder.isEmpty() && keyBuilder.charAt(keyBuilder.length() - 1) == '_') {
+            keyBuilder.deleteCharAt(keyBuilder.length() - 1);
         }
         return keyBuilder.toString();
     }

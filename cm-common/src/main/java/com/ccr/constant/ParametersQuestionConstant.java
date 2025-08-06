@@ -6,6 +6,13 @@ package com.ccr.constant;
 public class ParametersQuestionConstant {
 
     /**
+     * 权限,账户校验
+     */
+    public static final String NO_PERMISSION = "无权限操作";
+    public static final String USERNAME_EXIST = "用户名已存在";
+    public static final String USER_NOT_EXIST = "用户不存在";
+
+    /**
      * 基本资料
      */
     public static final String EMAIL_NOT_NULL = "邮箱地址不能为空";
@@ -23,6 +30,7 @@ public class ParametersQuestionConstant {
     public static final String NEW_PASSWORD_SAME_AS_OLD_PASSWORD = "新密码不能与旧密码相同";
     public static final String PASSWORD_ERROR = "旧密码错误";
 
+
     /**
      * 公告
      */
@@ -31,4 +39,13 @@ public class ParametersQuestionConstant {
     public static final String ANNOUNCEMENT_STATUS_NOT_NULL = "公告状态不能为空";
     public static final String ANNOUNCEMENT_TYPE_NOT_NULL = "公告类型不能为空";
     public static final String PRIORITY_NOT_NULL = "公告优先级不能为空";
+
+    /**
+     * 管理员用户信息
+     */
+    public static final String USERNAME_NOT_NULL = "用户名不能为空";
+    public static final String USERNAME_NOT_RIGHT = "用户名只能包含字母、数字、下划线、中划线、点、@、_、-、.";
+    public static final String PASSWORD_NOT_NULL = "密码不能为空";
+    public static final String PASSWORD_NOT_RIGHT = "密码只能包含字母、数字、下划线、中划线、点、@、_、-、.";
+    public static final String POSITION_NOT_NULL = "职位不能为空";
 }

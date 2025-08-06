@@ -23,4 +23,8 @@ public class ParametersUtil {
     public static boolean isRealName(String realName) {
         return realName != null && realName.matches(REAL_NAME_REGEX);
     }
+
+    public static boolean isUsername(String username) {
+        return username != null && username.matches("^[a-zA-Z0-9_]+$");
+    }
 }

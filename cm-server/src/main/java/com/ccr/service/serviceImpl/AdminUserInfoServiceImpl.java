@@ -1,26 +1,41 @@
 package com.ccr.service.serviceImpl;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.PhoneUtil;
-import com.ccr.constant.MessageConstant;
+import com.ccr.annotations.RedisCache;
+import com.ccr.annotations.RedisCacheEvict;
+import com.ccr.constant.MapConstant;
 import com.ccr.constant.ParametersQuestionConstant;
 import com.ccr.constant.RedisConstant;
+import com.ccr.constant.TypeConstant;
 import com.ccr.context.BaseContext;
-import com.ccr.dto.AdminUserInfoUpdateDTO;
-import com.ccr.dto.ResetPasswordDTO;
+import com.ccr.dto.*;
+import com.ccr.entity.Admin;
 import com.ccr.entity.User;
+import com.ccr.enumeration.OperationType;
 import com.ccr.exception.ParametersQuestionException;
+import com.ccr.mapper.AdminLoginMapper;
 import com.ccr.mapper.AdminUserInfoMapper;
+import com.ccr.result.PageResult;
 import com.ccr.service.AdminUserInfoService;
 import com.ccr.utils.ParametersUtil;
+import com.ccr.utils.UUIDUtils;
 import com.ccr.vo.AdminUserInfoVO;
+import com.ccr.vo.AdminWithUserInfoPageVO;
+import com.ccr.vo.AdminWithUserInfoVO;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 31373
@@ -33,6 +48,10 @@ public class AdminUserInfoServiceImpl implements AdminUserInfoService {
     private AdminUserInfoMapper adminUserInfoMapper;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    private static final String TRUE = "true";
+    @Autowired
+    private AdminLoginMapper adminLoginMapper;
 
     /**
      * 获取用户信息
@@ -81,6 +100,173 @@ public class AdminUserInfoServiceImpl implements AdminUserInfoService {
         userInfo.setPassword(DigestUtils.md5DigestAsHex(resetPasswordDTO.getNewPassword().getBytes()));
         adminUserInfoMapper.updateUserInfo(userInfo);
 
+    }
+
+    /**
+     * 添加管理员用户
+     *
+     * @param adminUserInfoDTO 添加用户
+     */
+    @RedisCacheEvict({@RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:list:", isPattern = true)})
+    @Transactional
+    @Override
+    public void addUser(AdminUserInfoDTO adminUserInfoDTO) {
+        Long currentId = BaseContext.getCurrentId();
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + currentId);
+        if (!TRUE.equals(map.get(RedisConstant.HASH_KEY_SUPER_ADMIN).toString())) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.NO_PERMISSION);
+        }
+        //校验参数
+        checkAddOrUpdateUser(adminUserInfoDTO, OperationType.INSERT);
+        //查询用户名是否重复
+        User repeat = adminLoginMapper.getAdminByUsername(adminUserInfoDTO.getUsername());
+        if (repeat != null) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.USERNAME_EXIST);
+        }
+        User user = new User();
+        Admin admin = new Admin();
+        BeanUtils.copyProperties(adminUserInfoDTO, user);
+        BeanUtils.copyProperties(adminUserInfoDTO, admin);
+        //密码加密
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+        //设置工号
+        admin.setAdminNo(UUIDUtils.generateJobNumberWithDateAndUUID());
+        //设置性别
+        user.setGender(0);
+        //设置用户类型
+        user.setUserType(TypeConstant.USER_TYPE_ADMIN);
+        //设置状态
+        user.setStatus(1);
+        adminUserInfoMapper.insertUser(user);
+        admin.setUserId(user.getId());
+        adminUserInfoMapper.insertAdmin(admin);
+    }
+
+    /**
+     * 修改管理员用户
+     *
+     * @param adminUserInfoDTO 修改用户
+     */
+    @RedisCacheEvict({
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:list:", isPattern = true),
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:details:", keyParts = "#adminUserInfoDTO.id")
+    })
+    @Override
+    public void updateUser(AdminUserInfoDTO adminUserInfoDTO) {
+        Long currentId = BaseContext.getCurrentId();
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + currentId);
+        if (!TRUE.equals(map.get(RedisConstant.HASH_KEY_SUPER_ADMIN).toString())) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.NO_PERMISSION);
+        }
+        //校验参数
+        checkAddOrUpdateUser(adminUserInfoDTO, OperationType.UPDATE);
+        User user = new User();
+        BeanUtils.copyProperties(adminUserInfoDTO, user);
+        adminUserInfoMapper.updateUserInfo(user);
+        Admin admin = new Admin();
+        BeanUtils.copyProperties(adminUserInfoDTO, admin);
+        admin.setUserId(adminUserInfoDTO.getId());
+        adminUserInfoMapper.updateAdmin(admin);
+    }
+
+    /**
+     * 删除管理员用户
+     *
+     * @param ids 删除用户id
+     */
+    @RedisCacheEvict({
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:list:", isPattern = true),
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:details:", keyParts = "#ids")
+    })
+    @Transactional
+    @Override
+    public void deleteUser(List<Long> ids) {
+        Long currentId = BaseContext.getCurrentId();
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + currentId);
+        if (!TRUE.equals(map.get(RedisConstant.HASH_KEY_SUPER_ADMIN).toString())) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.NO_PERMISSION);
+        }
+        adminUserInfoMapper.deleteUser(ids);
+        adminUserInfoMapper.deleteAdmin(ids);
+    }
+
+    /**
+     * 管理员用户-分页查询
+     *
+     * @param adminUserInfoPageDTO 管理员用户-分页查询
+     * @return 管理员用户-分页查询
+     */
+    @RedisCache(keyPrefix = "adminUserInfo:list:", keyParts = {
+            "#adminUserInfoPageDTO.pageNum", "#adminUserInfoPageDTO.pageSize",
+            "#adminUserInfoPageDTO.username", "#adminUserInfoPageDTO.status",
+            "#adminUserInfoPageDTO.realName", "#adminUserInfoPageDTO.adminNo"
+    },expireTime = 1,timeUnit = TimeUnit.HOURS)
+    @Override
+    public PageResult list(AdminUserInfoPageDTO adminUserInfoPageDTO) {
+        PageHelper.startPage(adminUserInfoPageDTO.getPageNum(), adminUserInfoPageDTO.getPageSize());
+        Page<AdminWithUserInfoPageVO> page = adminUserInfoMapper.list(adminUserInfoPageDTO);
+        return PageResult.builder()
+                .total(page.getTotal())
+                .records(page.getResult())
+                .build();
+    }
+
+    /**
+     * 获取管理员用户详情
+     *
+     * @param id 管理员用户id
+     * @return 管理员用户
+     */
+    @RedisCache(keyPrefix = "adminUserInfo:details:", keyParts = "#id",expireTime = 1,timeUnit = TimeUnit.HOURS)
+    @Override
+    public AdminWithUserInfoVO get(Long id) {
+        return adminUserInfoMapper.selectAdminWithUserInfoById(id);
+    }
+
+    /**
+     * 重置密码
+     *
+     * @return 重置密码
+     */
+    @Override
+    public String resetPwd(Long id) {
+        //根据id查询用户
+        User user = adminUserInfoMapper.selectById(id);
+        if (user == null) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.USER_NOT_EXIST);
+        }
+        String password = UUID.randomUUID().toString();
+        user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        adminUserInfoMapper.updateUserInfo(user);
+        return password;
+    }
+
+    /**
+     * 修改状态
+     *
+     * @param adminUserInfoUpdateStatusDTO 修改状态
+     */
+    @RedisCacheEvict({
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:list:", isPattern = true),
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "adminUserInfo:details:", keyParts = "#adminUserInfoUpdateStatusDTO.id")
+    })
+    @Override
+    public void updateStatus(AdminUserInfoUpdateStatusDTO adminUserInfoUpdateStatusDTO) {
+        Long currentId = BaseContext.getCurrentId();
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + currentId);
+        if (!TRUE.equals(map.get(RedisConstant.HASH_KEY_SUPER_ADMIN).toString())) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.NO_PERMISSION);
+        }
+        adminUserInfoMapper.updateUserInfoStatus(adminUserInfoUpdateStatusDTO);
+        //删除redis中存储的用户信息
+        Map<Object, Object> existingUserSession = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + adminUserInfoUpdateStatusDTO.getId());
+        if (!existingUserSession.isEmpty()) {
+            Object existingToken = existingUserSession.get(MapConstant.USER_TOKEN);
+            if (existingToken != null) {
+                // 删除旧的token
+                redisTemplate.delete(RedisConstant.JWT_TOKEN_KEY + existingToken);
+            }
+        }
     }
 
     /**
@@ -148,6 +334,62 @@ public class AdminUserInfoServiceImpl implements AdminUserInfoService {
         //真实姓名不能包含数字或者字母以及其他标点符号
         if (!ParametersUtil.isRealName(adminUserInfoUpdateDTO.getRealName())){
             throw new ParametersQuestionException(ParametersQuestionConstant.REAL_NAME_NOT_RIGHT);
+        }
+    }
+
+    /**
+     * 添加或者修改管理员用户信息的校验
+     */
+    private void checkAddOrUpdateUser(AdminUserInfoDTO adminUserInfoDTO, OperationType operationType) {
+        //用户名不能为空
+        if (adminUserInfoDTO.getUsername() == null) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.USERNAME_NOT_NULL);
+        }
+        //用户名只能是字母+数字
+        if (!ParametersUtil.isUsername(adminUserInfoDTO.getUsername())) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.USERNAME_NOT_RIGHT);
+        }
+        //密码不能为空
+        if (adminUserInfoDTO.getPassword() == null && operationType == OperationType.INSERT) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.PASSWORD_NOT_NULL);
+        }
+        //密码不能含有空格和汉字
+        if (adminUserInfoDTO.getPassword() != null && operationType == OperationType.INSERT) {
+            // 检查是否包含空格
+            if (adminUserInfoDTO.getPassword().contains(" ")) {
+                throw new ParametersQuestionException(ParametersQuestionConstant.PASSWORD_NOT_RIGHT);
+            }
+            // 检查是否包含汉字
+            for (char c : adminUserInfoDTO.getPassword().toCharArray()) {
+                if (Character.isIdeographic(c)) {
+                    throw new ParametersQuestionException(ParametersQuestionConstant.PASSWORD_NOT_RIGHT);
+                }
+            }
+        }
+        //真实姓名不能为空
+        if (adminUserInfoDTO.getRealName() == null) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.REAL_NAME_NOT_NULL);
+        }
+        //真实姓名不能包含数字或者字母以及其他标点符号
+        if (!ParametersUtil.isRealName(adminUserInfoDTO.getRealName())) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.REAL_NAME_NOT_RIGHT);
+        }
+        //手机号格式不正确
+        if (adminUserInfoDTO.getPhone() != null) {
+            if (!PhoneUtil.isPhone(adminUserInfoDTO.getPhone())) {
+                throw new ParametersQuestionException(ParametersQuestionConstant.PHONE_ERROR);
+            }
+        }
+        if (adminUserInfoDTO.getEmail() != null) {
+            //邮箱格式正则校验
+            if (!ParametersUtil.isEmail(adminUserInfoDTO.getEmail())) {
+                //邮箱格式不正确
+                throw new ParametersQuestionException(ParametersQuestionConstant.EMAIL_ERROR);
+            }
+        }
+        //职位不能为空
+        if (adminUserInfoDTO.getPosition() == null) {
+            throw new ParametersQuestionException(ParametersQuestionConstant.POSITION_NOT_NULL);
         }
     }
 }
