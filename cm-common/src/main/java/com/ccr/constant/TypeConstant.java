@@ -14,4 +14,9 @@ public class TypeConstant {
     public static final String SUPER_ADMIN = "superAdmin";
     public static final String ADMIN = "admin";
     public static final Long ID_SUPER_ADMIN = 1L;
+
+    /**
+     * 学生
+     */
+    public static final Integer USER_TYPE_STUDENT = 1;
 }

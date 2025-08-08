@@ -112,7 +112,7 @@
 
     <select id="selectById" resultType="com.ccr.entity.User">
         select id, username, password, real_name, phone, email, avatar, gender, status, user_type
-        from user where id = #{currentId} and is_deleted = 0
+        from user where id = #{currentId} and is_deleted = 0 and user_type = 3
     </select>
 
     <select id="list" resultType="com.ccr.vo.AdminWithUserInfoPageVO">

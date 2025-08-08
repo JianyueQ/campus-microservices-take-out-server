@@ -48,4 +48,11 @@ public class ParametersQuestionConstant {
     public static final String PASSWORD_NOT_NULL = "密码不能为空";
     public static final String PASSWORD_NOT_RIGHT = "密码只能包含字母、数字、下划线、中划线、点、@、_、-、.";
     public static final String POSITION_NOT_NULL = "职位不能为空";
+
+    /**
+     * excel校验
+     */
+    public static final String EXCEL_EMPTY = "excel文件内没有有效数据";
+    public static final String EXCEL_ERROR = "导入失败：";
+    ;
 }
