@@ -6,6 +6,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,6 +77,22 @@ public class ExcelUtil {
         }
 
         return outputStream.toByteArray();
+    }
+
+    private static void setCellValue(Cell cell, Object value, CellStyle dataStyle) {
+        if (value instanceof LocalDateTime) {
+            // 设置日期时间格式
+            dataStyle.setDataFormat(cell.getSheet().getWorkbook().createDataFormat().getFormat("yyyy-MM-dd HH:mm:ss"));
+            cell.setCellValue(((LocalDateTime) value).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        } else if (value instanceof LocalDate) {
+            // 设置日期格式
+            dataStyle.setDataFormat(cell.getSheet().getWorkbook().createDataFormat().getFormat("yyyy-MM-dd"));
+            cell.setCellValue(((LocalDate) value).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        } else {
+            // 处理其他类型的数据
+            cell.setCellValue(String.valueOf(value));
+        }
+        cell.setCellStyle(dataStyle);
     }
 
     /**

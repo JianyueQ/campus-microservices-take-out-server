@@ -6,6 +6,7 @@ import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.ccr.Excel.pojo.vo.StudentExcelVO;
 import com.ccr.annotations.RedisCache;
+import com.ccr.annotations.RedisCacheEvict;
 import com.ccr.constant.*;
 import com.ccr.dto.CollegeMajorClassPageDTO;
 import com.ccr.dto.StudentAccountStatusDTO;
@@ -106,6 +107,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      *
      * @param studentDTO 添加信息
      */
+    @RedisCacheEvict({@RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:list:", isPattern = true)})
     @Override
     @Transactional
     public void addStudentAccount(StudentDTO studentDTO) {
@@ -118,6 +120,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         BeanUtils.copyProperties(studentDTO, user);
         user.setUserType(TypeConstant.USER_TYPE_STUDENT);
         user.setStatus(StatusConstant.STATUS_NORMAL);
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         studentManagementMapper.insertUser(user);
 
         Student student = new Student();
@@ -134,6 +137,11 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      * @param userWithStudentInfoPageDTO 查询条件
      * @return PageResult
      */
+    @RedisCache(keyPrefix = "studentAccount:list:",keyParts = {
+            "#userWithStudentInfoPageDTO.username", "#userWithStudentInfoPageDTO.realName",
+            "#userWithStudentInfoPageDTO.status", "#userWithStudentInfoPageDTO.studentNo",
+            "#userWithStudentInfoPageDTO.pageNum", "#userWithStudentInfoPageDTO.pageSize"
+    },expireTime = 1, timeUnit = TimeUnit.HOURS)
     @Override
     public PageResult listStudentAccount(UserWithStudentInfoPageDTO userWithStudentInfoPageDTO) {
         PageHelper.startPage(userWithStudentInfoPageDTO.getPageNum(), userWithStudentInfoPageDTO.getPageSize());
@@ -172,7 +180,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         // 设置响应头
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "student_template.xls");
+        headers.setContentDispositionFormData("attachment", "student_template.xlsx");
         return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
     }
 
@@ -182,6 +190,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      * @param file 文件
      * @return 错误信息
      */
+    @RedisCacheEvict({@RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:list:", isPattern = true)})
     @Override
     @Transactional
     public String batchImportStudent(MultipartFile file) {
@@ -216,7 +225,8 @@ public class StudentManagementServiceImpl implements StudentManagementService {
 
                     // 解析数据并填充到User实体类中
                     user.setUsername(getStringValue(rowData.get(0)));
-                    user.setPassword(getStringValue(rowData.get(1)));
+                    //加密密码
+                    user.setPassword(DigestUtils.md5DigestAsHex(getStringValue(rowData.get(1)).getBytes()));
                     user.setRealName(getStringValue(rowData.get(2)));
                     user.setPhone(getStringValue(rowData.get(3)));
                     user.setEmail(getStringValue(rowData.get(4)));
@@ -280,6 +290,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      * @param id 学生id
      * @return 学生账号详情
      */
+    @RedisCache(keyPrefix = "studentAccount:detail:",keyParts = "#id",expireTime = 1, timeUnit = TimeUnit.HOURS)
     @Override
     public UserWithStudentInfoVO getStudentAccountDetail(String id) {
         return studentManagementMapper.getStudentAccountDetail(id);
@@ -290,12 +301,16 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      *
      * @param studentDTO 修改信息
      */
+    @RedisCacheEvict({
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:list:", isPattern = true),
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:detail:", keyParts = "#studentDTO.id")
+    })
     @Override
     public void updateStudentAccount(StudentDTO studentDTO) {
         User user = new User();
         user.setId(studentDTO.getId());
         user.setUsername(studentDTO.getUsername());
-        user.setPassword(studentDTO.getPassword());
+        user.setPassword(DigestUtils.md5DigestAsHex(studentDTO.getPassword().getBytes()));
         user.setRealName(studentDTO.getRealName());
         user.setPhone(studentDTO.getPhone());
         user.setEmail(studentDTO.getEmail());
@@ -314,6 +329,10 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      *
      * @param ids 删除id
      */
+    @RedisCacheEvict({
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:list:", isPattern = true),
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:detail:", keyParts = "#ids")
+    })
     @Override
     @Transactional
     public void deleteStudentAccount(List<Long> ids) {
@@ -345,6 +364,10 @@ public class StudentManagementServiceImpl implements StudentManagementService {
      *
      * @param studentAccountStatusDTO 修改信息
      */
+    @RedisCacheEvict({
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:list:", isPattern = true),
+            @RedisCacheEvict.CacheKeyConfig(keyPrefix = "studentAccount:detail:", keyParts = "#studentAccountStatusDTO.id")
+    })
     @Override
     public void updateStudentAccountStatus(StudentAccountStatusDTO studentAccountStatusDTO) {
         User user = new User();
@@ -361,6 +384,11 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         }
     }
 
+    /**
+     * 导出学生账号
+     * @param userWithStudentInfoPageDTO 获取信息
+     * @return 导出文件
+     */
     @Override
     public ResponseEntity<byte[]> exportStudentAccount(UserWithStudentInfoPageDTO userWithStudentInfoPageDTO) {
         try {

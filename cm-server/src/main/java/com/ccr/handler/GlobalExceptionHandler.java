@@ -5,10 +5,14 @@ import com.ccr.constant.MessageConstant;
 import com.ccr.exception.BaseException;
 import com.ccr.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.stream.Collectors;
 
 /**
  * 全局异常处理器，处理项目中抛出的业务异常
@@ -51,5 +55,20 @@ public class GlobalExceptionHandler {
         }else {
             return Result.error(UNKNOWN_ERROR);
         }
+    }
+
+    /**
+     * 参数验证失败异常
+     * @param ex 参数验证失败异常
+     * @return 错误信息
+     */
+    @ExceptionHandler
+    public Result<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+        log.warn("参数验证失败异常：{}", ex.getMessage());
+        BindingResult bindingResult = ex.getBindingResult();
+        String errorMessage = bindingResult.getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.joining(","));
+        return Result.error(errorMessage);
     }
 }

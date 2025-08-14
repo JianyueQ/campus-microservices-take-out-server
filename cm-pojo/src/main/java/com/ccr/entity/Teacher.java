@@ -48,11 +48,6 @@ public class Teacher implements Serializable {
     private String title;
     
     /**
-     * 学历
-     */
-    private String education;
-    
-    /**
      * 入职日期
      */
     private LocalDate hireDate;

@@ -19,4 +19,9 @@ public class TypeConstant {
      * 学生
      */
     public static final Integer USER_TYPE_STUDENT = 1;
+
+    /**
+     *  教师
+     */
+    public static final Integer USER_TYPE_TEACHER = 2;
 }
