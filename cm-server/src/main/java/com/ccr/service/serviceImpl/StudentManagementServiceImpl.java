@@ -21,6 +21,7 @@ import com.ccr.service.StudentManagementService;
 import com.ccr.vo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -353,7 +354,8 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         if (user == null) {
             throw new ParametersQuestionException(ParametersQuestionConstant.USER_NOT_EXIST);
         }
-        String password = UUID.randomUUID().toString();
+        //生成随机密码,密码只能是英文+数字
+        String password = RandomStringUtils.randomAlphanumeric(11);
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
         studentManagementMapper.updateUser(user);
         return password;

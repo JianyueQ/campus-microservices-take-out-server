@@ -54,7 +54,7 @@ ccr:
     admin-token-name: Authentication
 
     user-secret-key: qwertyuiopasdfghjklzxcvbnm
-    user-token-name: token
+    user-token-name: Token
     user-ttl: 7200000
 
     teacher-secret-key: qwertyuiopasdfghjklzxcvbnm

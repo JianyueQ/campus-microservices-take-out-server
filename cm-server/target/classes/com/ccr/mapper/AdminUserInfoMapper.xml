@@ -58,6 +58,8 @@
             <if test="phone != null and phone != ''"> phone = #{phone}, </if>
             <if test="email != null and email != ''"> email = #{email}, </if>
             <if test="status != null"> status = #{status}, </if>
+            <if test="avatar != null and avatar != ''"> avatar = #{avatar}, </if>
+            <if test="gender != null"> gender = #{gender}, </if>
         </set>
         where
             id = #{id} and is_deleted = 0
@@ -112,7 +114,7 @@
 
     <select id="selectById" resultType="com.ccr.entity.User">
         select id, username, password, real_name, phone, email, avatar, gender, status, user_type
-        from user where id = #{currentId} and is_deleted = 0 and user_type = 3
+        from user where id = #{currentId} and is_deleted = 0
     </select>
 
     <select id="list" resultType="com.ccr.vo.AdminWithUserInfoPageVO">

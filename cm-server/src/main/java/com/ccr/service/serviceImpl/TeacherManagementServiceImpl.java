@@ -24,6 +24,7 @@ import com.ccr.vo.UserWithTeacherInfoPageVO;
 import com.ccr.vo.UserWithTeacherInfoVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -350,7 +351,7 @@ public class TeacherManagementServiceImpl implements TeacherManagementService {
         if (user == null) {
             throw new ParametersQuestionException(ParametersQuestionConstant.USER_NOT_EXIST);
         }
-        String password = UUID.randomUUID().toString();
+        String password = RandomStringUtils.randomAlphanumeric(11);
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
         teacherManagementMapper.updateUser(user);
         return password;

@@ -1,7 +1,6 @@
-package com.ccr.controller.admin;
+package com.ccr.controller.student;
 
 import com.ccr.annotations.Log;
-import com.ccr.annotations.RedisCache;
 import com.ccr.dto.AnnouncementDTO;
 import com.ccr.dto.AnnouncementPageDTO;
 import com.ccr.enumeration.BusinessType;
@@ -19,8 +18,8 @@ import java.util.List;
  * @author 31373
  */
 @Slf4j
-@RestController("adminAnnouncementController")
-@RequestMapping("/admin/announcement")
+@RestController("studentAnnouncementController")
+@RequestMapping("/student/announcement")
 public class AnnouncementController {
 
     @Autowired

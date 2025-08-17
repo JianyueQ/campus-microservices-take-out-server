@@ -96,6 +96,11 @@ public class Announcement implements Serializable {
      * 更新人ID
      */
     private Long updateUser;
+
+    /**
+     * 修改人姓名
+     */
+    private String updateUserName;
     
     /**
      * 逻辑删除标识（0：未删除，1：已删除）

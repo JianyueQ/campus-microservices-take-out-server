@@ -36,4 +36,5 @@
             and user_type = 3 and is_deleted = 0
         </where>
     </select>
+
 </mapper>

@@ -26,6 +26,7 @@ import com.ccr.vo.AdminWithUserInfoVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,10 +49,10 @@ public class AdminUserInfoServiceImpl implements AdminUserInfoService {
     private AdminUserInfoMapper adminUserInfoMapper;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-
-    private static final String TRUE = "true";
     @Autowired
     private AdminLoginMapper adminLoginMapper;
+
+    private static final String TRUE = "true";
 
     /**
      * 获取用户信息
@@ -235,7 +236,7 @@ public class AdminUserInfoServiceImpl implements AdminUserInfoService {
         if (user == null) {
             throw new ParametersQuestionException(ParametersQuestionConstant.USER_NOT_EXIST);
         }
-        String password = UUID.randomUUID().toString();
+        String password = RandomStringUtils.randomAlphanumeric(11);
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
         adminUserInfoMapper.updateUserInfo(user);
         return password;

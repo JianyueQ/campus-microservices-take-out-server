@@ -107,11 +107,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public AnnouncementDetailsVO getAnnouncementDetails(Long id) {
         Announcement announcement = announcementMapper.getAnnouncementDetails(id);
 
-        Map<Object, Object> map = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + announcement.getUpdateUser());
-        String realName = map.get(MapConstant.REAL_NAME).toString();
+//        Map<Object, Object> map = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + announcement.getUpdateUser());
+//        String realName = map.get(MapConstant.REAL_NAME).toString();
         AnnouncementDetailsVO announcementDetailsVO = new AnnouncementDetailsVO();
         BeanUtils.copyProperties(announcement, announcementDetailsVO);
-        announcementDetailsVO.setUpdateUserName(realName);
+//        announcementDetailsVO.setUpdateUserName(realName);
 
         return announcementDetailsVO;
     }

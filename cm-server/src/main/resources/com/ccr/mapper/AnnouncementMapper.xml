@@ -69,10 +69,14 @@
             #{item}
         </foreach>
     </update>
+
     <select id="getAnnouncementDetails" resultType="com.ccr.entity.Announcement">
-        <include refid="BaseResult"/>
-        where id = #{id} and is_deleted = 0
+        select
+            announcement.id, announcement.title, announcement.content, announcement.announcement_type, announcement.priority,announcement.publisher_name, announcement.publish_time, announcement.start_time, announcement.end_time, announcement.read_count, announcement.status,announcement.update_user,user.real_name as updateUserName
+        from announcement left join user on announcement.update_user = user.id
+        where announcement.id = #{id} and announcement.is_deleted = 0
     </select>
+
     <select id="page" resultType="com.ccr.vo.AnnouncementPageVO">
         <include refid="BaseResult"/>
         <where>
