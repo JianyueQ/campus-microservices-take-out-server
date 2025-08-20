@@ -2,16 +2,17 @@ package com.ccr.service.serviceImpl;
 
 import com.ccr.constant.*;
 import com.ccr.dto.StudentLoginDTO;
+import com.ccr.dto.TeacherLoginDTO;
 import com.ccr.entity.User;
 import com.ccr.exception.LoginQuestionException;
-import com.ccr.mapper.AdminLoginMapper;
 import com.ccr.mapper.StudentLoginMapper;
+import com.ccr.mapper.TeacherLoginMapper;
 import com.ccr.properties.JwtProperties;
-import com.ccr.service.StudentLoginService;
+import com.ccr.service.TeacherLoginService;
 import com.ccr.service.VerifyCodeService;
 import com.ccr.utils.JwtUtil;
-import com.ccr.vo.AdminLoginVO;
 import com.ccr.vo.StudentLoginVO;
+import com.ccr.vo.TeacherLoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,10 @@ import java.util.concurrent.TimeUnit;
  * @author 31373
  */
 @Service
-public class StudentLoginServiceImpl implements StudentLoginService {
+public class TeacherLoginServiceImpl implements TeacherLoginService {
 
     @Autowired
-    private StudentLoginMapper studentLoginMapper;
+    private TeacherLoginMapper teacherLoginMapper;
     @Autowired
     private JwtProperties jwtProperties;
     @Autowired
@@ -37,36 +38,36 @@ public class StudentLoginServiceImpl implements StudentLoginService {
     private VerifyCodeService verifyCodeService;
 
     /**
-     * 学生登录
+     * 教师登录
      *
-     * @param studentLoginDTO 学生登录参数
-     * @return
+     * @param teacherLoginDTO 管理员登录参数
+     * @return token
      */
     @Override
-    public StudentLoginVO login(StudentLoginDTO studentLoginDTO) {
+    public TeacherLoginVO login(TeacherLoginDTO teacherLoginDTO) {
         //查看redis登录计数器,判断是否大于等于5,如果满足条件则锁定用户5分钟
-        String loginCount = redisTemplate.opsForValue().get(RedisConstant.ADMIN_LOGIN_ERROR_COUNT_KEY + studentLoginDTO.getUsername());
+        String loginCount = redisTemplate.opsForValue().get(RedisConstant.ADMIN_LOGIN_ERROR_COUNT_KEY + teacherLoginDTO.getUsername());
         if (loginCount != null && Integer.parseInt(loginCount) >= 5) {
             throw new LoginQuestionException(MessageConstant.USER_LOCKED);
         }
         //根据用户名查询用户信息
         User user = new User();
-        user.setUsername(studentLoginDTO.getUsername());
-        user = studentLoginMapper.getStudentByUser(user);
+        user.setUsername(teacherLoginDTO.getUsername());
+        user = teacherLoginMapper.getTeacherByUser(user);
         //校验用户
         validate(user);
         //密码比对
-        String password = DigestUtils.md5DigestAsHex(studentLoginDTO.getPassword().getBytes());
+        String password = DigestUtils.md5DigestAsHex(teacherLoginDTO.getPassword().getBytes());
         if (!password.equals(user.getPassword())) {
             //如果密码输入错误超过五次就锁定账户5分钟
-            redisTemplate.opsForValue().increment(RedisConstant.STUDENT_LOGIN_ERROR_COUNT_KEY + studentLoginDTO.getUsername(), RedisConstant.LOGIN_ERROR_COUNT);
+            redisTemplate.opsForValue().increment(RedisConstant.STUDENT_LOGIN_ERROR_COUNT_KEY + teacherLoginDTO.getUsername(), RedisConstant.LOGIN_ERROR_COUNT);
             //设置时间
-            redisTemplate.expire(RedisConstant.STUDENT_LOGIN_ERROR_COUNT_KEY + studentLoginDTO.getUsername(), RedisConstant.LOGIN_ERROR_COUNT_TIME, TimeUnit.MINUTES);
+            redisTemplate.expire(RedisConstant.STUDENT_LOGIN_ERROR_COUNT_KEY + teacherLoginDTO.getUsername(), RedisConstant.LOGIN_ERROR_COUNT_TIME, TimeUnit.MINUTES);
             //密码错误
             throw new LoginQuestionException(MessageConstant.PASSWORD_ERROR);
         }
         //验证码验证
-        boolean checkVerifyCode = verifyCodeService.checkVerifyCode(studentLoginDTO.getUuid(), studentLoginDTO.getCode());
+        boolean checkVerifyCode = verifyCodeService.checkVerifyCode(teacherLoginDTO.getUuid(), teacherLoginDTO.getCode());
         if (!checkVerifyCode){
             throw new LoginQuestionException(MessageConstant.LOGIN_CODE_ERROR);
         }
@@ -95,7 +96,7 @@ public class StudentLoginServiceImpl implements StudentLoginService {
         //设置过期时间
         redisTemplate.expire(RedisConstant.JWT_TOKEN_KEY + token, RedisConstant.TOKEN_TTL, TimeUnit.HOURS);
         redisTemplate.expire(RedisConstant.JWT_ID_KEY + user.getId(), RedisConstant.TOKEN_TTL, TimeUnit.HOURS);
-        return StudentLoginVO.builder()
+        return TeacherLoginVO.builder()
                 .token(token)
                 .build();
     }
@@ -125,9 +126,9 @@ public class StudentLoginServiceImpl implements StudentLoginService {
             //用户被禁用
             throw new LoginQuestionException(MessageConstant.USER_DISABLED);
         }
-        if (!TypeConstant.USER_TYPE_STUDENT.equals(user.getUserType())){
-            //用户不是学生
-            throw new LoginQuestionException(MessageConstant.USER_NOT_STUDENT);
+        if (!TypeConstant.USER_TYPE_TEACHER.equals(user.getUserType())){
+            //用户不是教师
+            throw new LoginQuestionException(MessageConstant.USER_NOT_TEACHER);
         }
     }
 

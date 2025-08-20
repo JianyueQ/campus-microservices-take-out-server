@@ -21,4 +21,5 @@ public class MessageConstant {
     public static final String LOGIN_CODE_ERROR = "验证码错误";
     public static final String USER_LOCKED = "密码错误次数过多,短时间内无法登录";
     public static final String USER_NOT_STUDENT = "该账户不是学生";
+    public static final String USER_NOT_TEACHER = "该账户不是教师";
 }

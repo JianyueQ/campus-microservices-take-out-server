@@ -1,11 +1,14 @@
-package com.ccr.controller.student;
+package com.ccr.controller.teacher;
 
 import com.ccr.constant.SuccessConstant;
 import com.ccr.context.BaseContext;
 import com.ccr.dto.StudentLoginDTO;
+import com.ccr.dto.TeacherLoginDTO;
 import com.ccr.result.Result;
 import com.ccr.service.StudentLoginService;
+import com.ccr.service.TeacherLoginService;
 import com.ccr.vo.StudentLoginVO;
+import com.ccr.vo.TeacherLoginVO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,29 +22,29 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/student")
-public class StudentLoginController {
+@RequestMapping("/teacher")
+public class TeacherLoginController {
 
     @Autowired
-    private StudentLoginService studentLoginService;
+    private TeacherLoginService teacherLoginService;
 
     /**
-     * 学生登录
+     * 教师登录
      */
     @PostMapping("/login")
-    public Result<StudentLoginVO> login(@Valid @RequestBody StudentLoginDTO studentLoginDTO) {
-        log.info("学生登录数据:{}", studentLoginDTO);
-        return Result.success(studentLoginService.login(studentLoginDTO));
+    public Result<TeacherLoginVO> login(@Valid @RequestBody TeacherLoginDTO teacherLoginDTO) {
+        log.info("教师登录数据:{}", teacherLoginDTO);
+        return Result.success(teacherLoginService.login(teacherLoginDTO));
     }
 
     /**
-     * 学生登出
+     * 教师登出
      */
     @PostMapping("/logout")
     public Result<String> logout() {
         Long currentId = BaseContext.getCurrentId();
-        log.info("学生:{}登出", currentId);
-        studentLoginService.logout(currentId);
+        log.info("教师:{}登出", currentId);
+        teacherLoginService.logout(currentId);
         return Result.success(SuccessConstant.LOGOUT_SUCCESS);
     }
 }

@@ -19,20 +19,23 @@ public class ResetPasswordDTO implements Serializable {
     /**
      * 旧密码
      */
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$", message = "密码格式不正确")
+    //旧密码格式中不能含有空格和汉字
+    @Pattern(regexp = "^[^\\s\u4e00-\u9fa5]+$", message = "旧密码不能包含空格和汉字")
     @NotNull(message = "旧密码不能为空")
     private String oldPassword;
     /**
      * 新密码
      */
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$", message = "密码格式不正确")
+
     @NotNull(message = "新密码不能为空")
+    @Pattern(regexp = "^[^\\s\u4e00-\u9fa5]+$", message = "新密码不能包含空格和汉字")
     private String newPassword;
     /**
      * 重复新密码
      */
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$", message = "密码格式不正确")
+
     @NotNull(message = "确认新密码不能为空")
+    @Pattern(regexp = "^[^\\s\u4e00-\u9fa5]+$", message = "确认新密码不能包含空格和汉字")
     private String rePassword;
 
 }

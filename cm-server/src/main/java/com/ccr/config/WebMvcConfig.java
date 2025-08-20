@@ -2,6 +2,7 @@ package com.ccr.config;
 
 import com.ccr.interceptor.AdminInterceptor;
 import com.ccr.interceptor.StudentInterceptor;
+import com.ccr.interceptor.TeacherInterceptor;
 import com.ccr.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private AdminInterceptor adminInterceptor;
     @Autowired
     private StudentInterceptor studentInterceptor;
+    @Autowired
+    private TeacherInterceptor teacherInterceptor;
 
     /**
      * 拓展springMvc消息转换器
@@ -49,5 +52,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         log.info("开始注册自定义拦截器...");
         registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login").order(0);
         registry.addInterceptor(studentInterceptor).addPathPatterns("/student/**").excludePathPatterns("/student/login").order(0);
+        registry.addInterceptor(teacherInterceptor).addPathPatterns("/teacher/**").excludePathPatterns("/teacher/login").order(0);
     }
 }

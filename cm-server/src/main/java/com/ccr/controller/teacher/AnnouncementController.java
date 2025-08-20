@@ -1,4 +1,4 @@
-package com.ccr.controller.student;
+package com.ccr.controller.teacher;
 
 import com.ccr.annotations.Log;
 import com.ccr.dto.AnnouncementDTO;
@@ -18,8 +18,8 @@ import java.util.List;
  * @author 31373
  */
 @Slf4j
-@RestController("studentAnnouncementController")
-@RequestMapping("/student/announcement")
+@RestController("teacherAnnouncementController")
+@RequestMapping("/teacher/announcement")
 public class AnnouncementController {
 
     @Autowired
