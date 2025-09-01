@@ -26,7 +26,12 @@ public class Teacher implements Serializable {
      * 用户ID
      */
     private Long userId;
-    
+
+    /**
+     * 真实姓名(冗余)
+     */
+    private String realName;
+
     /**
      * 工号
      */

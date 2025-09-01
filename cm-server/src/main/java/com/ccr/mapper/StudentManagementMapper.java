@@ -3,6 +3,7 @@ package com.ccr.mapper;
 import com.ccr.Excel.pojo.vo.StudentExcelVO;
 import com.ccr.annotations.AutoFile;
 import com.ccr.dto.CollegeMajorClassPageDTO;
+import com.ccr.dto.ListStudentPageDTO;
 import com.ccr.dto.UserWithStudentInfoPageDTO;
 import com.ccr.entity.Student;
 import com.ccr.entity.User;
@@ -156,4 +157,17 @@ public interface StudentManagementMapper {
      */
     Page<StudentExcelVO> exportStudentAccount(UserWithStudentInfoPageDTO userWithStudentInfoPageDTO);
 
+    /**
+     * 获取课程树形列表
+     * @return 课程树形列表
+     */
+    List<CourseListVO> listCourse(Long currentId);
+
+    /**
+     * 获取学生列表
+     *
+     * @param listStudentPageDTO 查询条件
+     * @return 学生列表
+     */
+    Page<StudentListVO> listStudent(ListStudentPageDTO listStudentPageDTO);
 }

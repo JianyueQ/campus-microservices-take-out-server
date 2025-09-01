@@ -21,6 +21,11 @@ public class UserWithTeacherInfoPageVO implements Serializable {
     private Long id;
 
     /**
+     * 教师id
+     */
+    private Long teacherId;
+
+    /**
      * 用户名
      */
     private String username;

@@ -30,4 +30,13 @@ public class RedisConstant {
      * 学生
      */
     public static final String STUDENT_LOGIN_ERROR_COUNT_KEY = "student:login:error:count:";
+    public static final String COURSE_SELECTION_COUNT_HASH = "course:selection:count:";
+    public static final String COURSE_SELECTION_LOCK_KEY = "course:selection:lock:";
+    public static final String COURSE_SELECTED_COURSE = "course:selected:course:";
+
+    /**
+     * 课程
+     */
+    public static final String TEACHER_COURSE_PAGE_KEY = "course:page:teacher:";
+    public static final String ADMIN_COURSE_PAGE_KEY = "course:page:admin:";
 }

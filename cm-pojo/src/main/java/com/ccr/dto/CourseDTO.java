@@ -1,5 +1,6 @@
-package com.ccr.entity;
+package com.ccr.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,60 +10,63 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 课程信息实体类
- * 对应数据库表: course
  * @author 31373
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Course implements Serializable {
+public class CourseDTO implements Serializable {
 
     /**
      * 课程ID
      */
     private Long id;
-    
+
     /**
      * 课程编码
      */
+    @NotNull(message = "课程编码不能为空")
     private String courseCode;
-    
+
     /**
      * 课程名称
      */
+    @NotNull(message = "课程名称不能为空")
     private String name;
-    
+
     /**
      * 课程描述
      */
     private String description;
-    
+
     /**
      * 理论学时
      */
+
     private Integer theoryHours;
-    
+
     /**
      * 实践学时
      */
     private Integer practiceHours;
-    
+
     /**
      * 总学时
      */
     private Integer totalHours;
-    
+
     /**
      * 课程类型（1:必修, 2:选修, 3:公选）
      */
+    @NotNull(message = "课程类型不能为空")
     private Integer courseType;
-    
+
     /**
      * 考核方式（1:考试, 2:考查）
      */
+    @NotNull(message = "考核方式不能为空")
     private Integer assessmentType;
-    
+
     /**
      * 状态（0:禁用, 1:启用）
      */
@@ -79,27 +83,19 @@ public class Course implements Serializable {
     private LocalDateTime selectionEndTime;
 
     /**
-     * 创建时间
+     * 学期（如2023-2024 1）
      */
-    private LocalDateTime createTime;
-    
+    @NotNull(message = "学期不能为空")
+    private String semester;
+
     /**
-     * 更新时间
+     * 最大学生人数
      */
-    private LocalDateTime updateTime;
-    
+    private Integer maxStudentCount;
+
     /**
-     * 创建人ID
+     * 上课时间地点信息
      */
-    private Long createUser;
-    
-    /**
-     * 更新人ID
-     */
-    private Long updateUser;
-    
-    /**
-     * 逻辑删除标识（0：未删除，1：已删除）
-     */
-    private Integer isDeleted;
+    private String scheduleInfo;
+
 }

@@ -1,10 +1,8 @@
 package com.ccr.service;
 
-import com.ccr.dto.CollegeMajorClassPageDTO;
-import com.ccr.dto.StudentAccountStatusDTO;
-import com.ccr.dto.StudentDTO;
-import com.ccr.dto.UserWithStudentInfoPageDTO;
+import com.ccr.dto.*;
 import com.ccr.result.PageResult;
+import com.ccr.vo.CourseListVO;
 import com.ccr.vo.UserWithStudentInfoVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,4 +87,16 @@ public interface StudentManagementService {
      */
     ResponseEntity<byte[]> exportStudentAccount(UserWithStudentInfoPageDTO userWithStudentInfoPageDTO);
 
+    /**
+     * 教师端获取学生列表
+     * @return PageResult
+     */
+    List<CourseListVO> listCourse();
+
+    /**
+     * 获取学生列表-分页查询
+     * @param listStudentPageDTO 分页数据
+     * @return 学生列表
+     */
+    PageResult listStudent(ListStudentPageDTO listStudentPageDTO);
 }

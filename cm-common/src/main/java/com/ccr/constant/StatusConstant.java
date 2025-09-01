@@ -14,4 +14,13 @@ public class StatusConstant {
      */
     public static final Integer STATUS_DISABLE = 0;
 
+    /**
+     * 在职
+     */
+    public static final Integer STATUS_INCUMBENCY = 1;
+
+    /**
+     * 已选
+     */
+    public static final Integer STATUS_ELECTED = 1;
 }

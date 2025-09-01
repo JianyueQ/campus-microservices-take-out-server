@@ -23,7 +23,7 @@ import java.util.List;
  * @author 31373
  */
 @Slf4j
-@RestController
+@RestController("adminStudentManagementController")
 @RequestMapping("/admin/student")
 public class StudentManagementController {
 

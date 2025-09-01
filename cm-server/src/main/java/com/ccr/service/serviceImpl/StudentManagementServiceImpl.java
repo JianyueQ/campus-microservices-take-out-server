@@ -1,6 +1,5 @@
 package com.ccr.service.serviceImpl;
 
-import cn.hutool.core.lang.UUID;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -8,10 +7,8 @@ import com.ccr.Excel.pojo.vo.StudentExcelVO;
 import com.ccr.annotations.RedisCache;
 import com.ccr.annotations.RedisCacheEvict;
 import com.ccr.constant.*;
-import com.ccr.dto.CollegeMajorClassPageDTO;
-import com.ccr.dto.StudentAccountStatusDTO;
-import com.ccr.dto.StudentDTO;
-import com.ccr.dto.UserWithStudentInfoPageDTO;
+import com.ccr.context.BaseContext;
+import com.ccr.dto.*;
 import com.ccr.entity.Student;
 import com.ccr.entity.User;
 import com.ccr.exception.ParametersQuestionException;
@@ -311,7 +308,6 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         User user = new User();
         user.setId(studentDTO.getId());
         user.setUsername(studentDTO.getUsername());
-        user.setPassword(DigestUtils.md5DigestAsHex(studentDTO.getPassword().getBytes()));
         user.setRealName(studentDTO.getRealName());
         user.setPhone(studentDTO.getPhone());
         user.setEmail(studentDTO.getEmail());
@@ -464,6 +460,33 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         } catch (Exception e) {
             throw new ParametersQuestionException("导出失败: " + e.getMessage());
         }
+    }
+
+    /**
+     * 获取课程名称
+     *
+     * @return 课程名称
+     */
+    @Override
+    public List<CourseListVO> listCourse() {
+        Long currentId = BaseContext.getCurrentId();
+        return studentManagementMapper.listCourse(currentId);
+    }
+
+    /**
+     * 获取学生列表
+     *
+     * @param listStudentPageDTO 分页数据
+     * @return 分页数据
+     */
+    @Override
+    public PageResult listStudent(ListStudentPageDTO listStudentPageDTO) {
+        PageHelper.startPage(listStudentPageDTO.getPageNum(), listStudentPageDTO.getPageSize());
+        Page<StudentListVO> page = studentManagementMapper.listStudent(listStudentPageDTO);
+        return PageResult.builder()
+                .total(page.getTotal())
+                .records(page.getResult())
+                .build();
     }
 
     /**

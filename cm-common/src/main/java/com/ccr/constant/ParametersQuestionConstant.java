@@ -54,5 +54,19 @@ public class ParametersQuestionConstant {
      */
     public static final String EXCEL_EMPTY = "excel文件内没有有效数据";
     public static final String EXCEL_ERROR = "导入失败：";
-    ;
+
+    /**
+     * 课程校验
+     */
+    public static final String SELECTION_START_TIME_NOT_NULL = "选课开始时间不能为空";
+    public static final String SELECTION_END_TIME_NOT_NULL = "选课结束时间不能为空";
+    public static final String TEACHER_NOT_EXIST = "请先选择教师";
+    public static final String TEACHER_NOT_INCUMBENCY = "请检查所选择的教师是否为在职状态";
+    public static final String CLASS_NOT_EXIST = "请选择班级";
+    public static final String MAX_STUDENT_COUNT_LESS_THAN_CURRENT_STUDENT_COUNT = "最大学生数不能小于当前学生数";
+    public static final String SELECT_COURSE_EXCEED_MAX_COUNT = "课程已达到最大选课人数限制";
+    public static final String SELECT_COURSE_NOT_EXIST = "无法获取课程的选课信息";
+    public static final String SELECT_COURSE_ALREADY_SELECTED = "课程已选";
+    public static final String SELECT_COURSE_NOT_IN_TIME = "课程不在选课时间内";
+    public static final String SELECTION_NOT_IN_TIME = "课程不在规定时间内,无法取消";
 }

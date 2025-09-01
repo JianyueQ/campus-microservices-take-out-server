@@ -66,10 +66,10 @@ public class StudentLoginServiceImpl implements StudentLoginService {
             throw new LoginQuestionException(MessageConstant.PASSWORD_ERROR);
         }
         //验证码验证
-        boolean checkVerifyCode = verifyCodeService.checkVerifyCode(studentLoginDTO.getUuid(), studentLoginDTO.getCode());
-        if (!checkVerifyCode){
-            throw new LoginQuestionException(MessageConstant.LOGIN_CODE_ERROR);
-        }
+//        boolean checkVerifyCode = verifyCodeService.checkVerifyCode(studentLoginDTO.getUuid(), studentLoginDTO.getCode());
+//        if (!checkVerifyCode){
+//            throw new LoginQuestionException(MessageConstant.LOGIN_CODE_ERROR);
+//        }
         // 实现单点登录：检查用户是否已在其他地方登录，如果已登录则将其踢下线
         Map<Object, Object> existingUserSession = redisTemplate.opsForHash().entries(RedisConstant.JWT_ID_KEY + user.getId());
         if (!existingUserSession.isEmpty()) {
