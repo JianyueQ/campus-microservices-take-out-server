@@ -9,6 +9,7 @@ import com.ccr.entity.*;
 import com.ccr.enumeration.OperationType;
 import com.ccr.vo.*;
 import com.github.pagehelper.Page;
+import jakarta.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;
@@ -206,4 +207,24 @@ public interface CourseMapper {
      * @param cancelCourseSelectionDTO 课程取消信息
      */
     void cancelCourseSelection(CancelCourseSelectionDTO cancelCourseSelectionDTO);
+
+    /**
+     * 获取课程树形列表
+     * @param currentId 当前用户ID
+     * @return 课程树形列表
+     */
+    List<CourseListVO> listCourse(Long currentId);
+
+    /**
+     * 删除课程选课信息
+     * @param courseId 课程id
+     */
+    void deleteCourseSelectionByCourseId(Long courseId);
+
+    /**
+     * 获取学生课程列表
+     * @param currentId 当前用户ID
+     * @return 学生课程列表
+     */
+    List<CourseListVO> listCourseByStudent(Long currentId);
 }

@@ -69,4 +69,13 @@ public class ParametersQuestionConstant {
     public static final String SELECT_COURSE_ALREADY_SELECTED = "课程已选";
     public static final String SELECT_COURSE_NOT_IN_TIME = "课程不在选课时间内";
     public static final String SELECTION_NOT_IN_TIME = "课程不在规定时间内,无法取消";
+    public static final String ATTENDANCE_EXIST = "该课程已存在一个正在进行的签到";
+    public static final String ATTENDANCE_ERROR = "课程发起签到异常";
+
+    /**
+     * 签到校验
+     */
+    public static final String ATTENDANCE_EXPIRED = "签到已过期";
+    public static final String ATTENDANCE_PASSWORD_ERROR = "签到密码错误";
+    public static final String ATTENDANCE_ALREADY_SIGN_IN = "已签到";
 }

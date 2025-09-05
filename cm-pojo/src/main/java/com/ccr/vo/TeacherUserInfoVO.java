@@ -18,6 +18,11 @@ import java.time.LocalDate;
 public class TeacherUserInfoVO implements Serializable {
 
     /**
+     * 教师id
+     */
+    private Long teacherId;
+
+    /**
      * 真实姓名
      */
     private String realName;

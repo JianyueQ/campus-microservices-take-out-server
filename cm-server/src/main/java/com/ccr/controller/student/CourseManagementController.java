@@ -8,6 +8,7 @@ import com.ccr.enumeration.BusinessType;
 import com.ccr.result.PageResult;
 import com.ccr.result.Result;
 import com.ccr.service.CourseService;
+import com.ccr.vo.CourseListVO;
 import com.ccr.vo.CourseSelectionVO;
 import com.ccr.vo.CoursesNumberVO;
 import lombok.extern.slf4j.Slf4j;
@@ -79,4 +80,12 @@ public class CourseManagementController {
         return Result.success();
     }
 
+    /**
+     * 获取课程树形列表
+     */
+    @GetMapping("/courseList")
+    public Result<List<CourseListVO>> listCourse() {
+        log.info("获取课程列表");
+        return Result.success(courseService.listCourseByStudent());
+    }
 }

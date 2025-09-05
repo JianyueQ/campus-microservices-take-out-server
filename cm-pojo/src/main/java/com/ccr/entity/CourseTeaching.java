@@ -27,7 +27,12 @@ public class CourseTeaching implements Serializable {
      * 课程ID
      */
     private Long courseId;
-    
+
+    /**
+     * 课程名称
+     */
+    private String courseName;
+
     /**
      * 教师ID
      */

@@ -462,16 +462,7 @@ public class StudentManagementServiceImpl implements StudentManagementService {
         }
     }
 
-    /**
-     * 获取课程名称
-     *
-     * @return 课程名称
-     */
-    @Override
-    public List<CourseListVO> listCourse() {
-        Long currentId = BaseContext.getCurrentId();
-        return studentManagementMapper.listCourse(currentId);
-    }
+
 
     /**
      * 获取学生列表

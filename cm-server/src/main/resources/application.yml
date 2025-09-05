@@ -9,16 +9,16 @@ spring:
   main:
     allow-circular-references: true
   datasource:
-      driver-class-name: ${ccr.datasource.driver-class-name}
-      url: jdbc:mysql://${ccr.datasource.host}:${ccr.datasource.port}/${ccr.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${ccr.datasource.username}
-      password: ${ccr.datasource.password}
+      driver-class-name: ${cm.datasource.driver-class-name}
+      url: jdbc:mysql://${cm.datasource.host}:${cm.datasource.port}/${cm.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${cm.datasource.username}
+      password: ${cm.datasource.password}
   data:
     redis:
-      host: ${ccr.redis.host}
-      port: ${ccr.redis.port}
-      database: ${ccr.redis.database}
-      password: ${ccr.redis.password}
+      host: ${cm.redis.host}
+      port: ${cm.redis.port}
+      database: ${cm.redis.database}
+      password: ${cm.redis.password}
 
   servlet:
     multipart:
@@ -44,7 +44,7 @@ logging:
         service: info
         controller: info
 
-ccr:
+cm:
   jwt:
     # 设置jwt签名加密时使用的秘钥
     admin-secret-key: qwertyuiopasdfghjklzxcvbnm
@@ -62,9 +62,9 @@ ccr:
     teacher-token-name: Authentications
 
   alioss:
-    endpoint: ${ccr.alioss.endpoint}
-    access-key-id: ${ccr.alioss.access-key-id}
-    access-key-secret: ${ccr.alioss.access-key-secret}
-    bucket-name: ${ccr.alioss.bucket-name}
+    endpoint: ${cm.alioss.endpoint}
+    access-key-id: ${cm.alioss.access-key-id}
+    access-key-secret: ${cm.alioss.access-key-secret}
+    bucket-name: ${cm.alioss.bucket-name}
 
 

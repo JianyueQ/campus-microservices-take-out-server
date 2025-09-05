@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author 31373
  */
 @Component
-@ConfigurationProperties(prefix = "ccr.jwt")
+@ConfigurationProperties(prefix = "cm.jwt")
 @Data
 public class JwtProperties {
 

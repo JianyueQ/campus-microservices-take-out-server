@@ -29,4 +29,11 @@ public class TypeConstant {
      * 课程
      */
     public static final Integer COURSE_TYPE_REQUIRED = 1;
+
+    /**
+     * 考勤
+     */
+    public static final Integer LOCATION_CHECK_IN = 1;
+    public static final Integer PASSWORD_CHECK_IN = 3;
+
 }

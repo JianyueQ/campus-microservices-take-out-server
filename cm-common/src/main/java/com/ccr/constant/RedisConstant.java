@@ -39,4 +39,9 @@ public class RedisConstant {
      */
     public static final String TEACHER_COURSE_PAGE_KEY = "course:page:teacher:";
     public static final String ADMIN_COURSE_PAGE_KEY = "course:page:admin:";
+
+    /**
+     * 考勤
+     */
+    public static final String ATTENDANCE_VERIFICATION_KEY = "attendance:";
 }

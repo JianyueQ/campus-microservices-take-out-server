@@ -162,7 +162,8 @@ public class CourseServiceImpl implements CourseService {
         courseSelection.setSemester(courseTeaching.getSemester());
         courseSelection.setSelectionTime(LocalDateTime.now());
         courseSelection.setStatus(StatusConstant.STATUS_ELECTED);
-
+        //根据课程id将所有之前该课程的选课记录删除
+        courseMapper.deleteCourseSelectionByCourseId(assignClassToCourse.getCourseId());
         //根据classIds获取学生id
         List<Long> studentIds = courseMapper.getStudentIdsByClassIds(assignClassToCourse.getClassIds());
         for (Long studentId : studentIds) {
@@ -497,7 +498,6 @@ public class CourseServiceImpl implements CourseService {
             if (course == null || !now.isAfter(course.getSelectionStartTime()) || now.isAfter(course.getSelectionEndTime())) {
                 throw new ParametersQuestionException(ParametersQuestionConstant.SELECTION_NOT_IN_TIME);
             }
-
             // 检查Redis缓存是否存在，如果不存在则从数据库加载
             if (!redisAtomicUtil.hasHashField(redisKey, courseId.toString())) {
                 // Redis中没有缓存数据，从数据库获取全部启用且未删除的课程信息
@@ -513,34 +513,6 @@ public class CourseServiceImpl implements CourseService {
             }
 
         }
-        //获取当前选课人数
-//        List<String> courseIdsString = cancelCourseSelectionDTO.getCourseIds().stream().map(String::valueOf).toList();
-//        List<Object> courseIdsObject = new ArrayList<>(courseIdsString);
-//        List<Object> selectionCounts = redisTemplate.opsForHash().multiGet(redisKey, courseIdsObject);
-//        for (int i = 0; i < cancelCourseSelectionDTO.getCourseIds().size(); i++) {
-//            Long courseId = cancelCourseSelectionDTO.getCourseIds().get(i);
-//            Object countData = selectionCounts.get(i);
-//            if (countData == null) {
-//                // 如果Redis中没有缓存数据，则从数据库获取
-//                List<CoursesNumberVO> courseNumbers = courseMapper.getAllActiveCourseSelectionCount(now);
-//                cacheAllCourseSelectionCount(courseNumbers);
-//                // 重新获取该课程的信息
-//                countData = redisTemplate.opsForHash().get(redisKey, courseId.toString());
-//            }
-//            //执行取消操作,需要将获取到的当前选课人数减1
-//            if (countData != null) {
-//                String[] split = countData.toString().split(",");
-//                //当前选课人数
-//                int currentCount = Integer.parseInt(split[0]);
-//                int maxCount = Integer.parseInt(split[1]);
-//                String updatedCourseData = (currentCount - 1) + "," + maxCount;
-//                if (currentCount > 0){
-//                    redisTemplate.opsForHash().put(redisKey, courseId.toString(), updatedCourseData);
-//                    // 设置过期时间，确保缓存不会永久存在
-//                    redisTemplate.expire(redisKey, 1, TimeUnit.HOURS);
-//                }
-//            }
-//        }
         //取消课程选课
         cancelCourseSelectionDTO.setUserId(currentId);
         cancelCourseSelectionDTO.setCancelTime(now);
@@ -548,6 +520,18 @@ public class CourseServiceImpl implements CourseService {
         courseMapper.cancelCourseSelection(cancelCourseSelectionDTO);
         //刷新缓存
         redisTemplate.delete(RedisConstant.COURSE_SELECTED_COURSE + currentId);
+    }
+
+    @Override
+    public List<CourseListVO> listCourse() {
+        Long currentId = BaseContext.getCurrentId();
+        return courseMapper.listCourse(currentId);
+    }
+
+    @Override
+    public List<CourseListVO> listCourseByStudent() {
+        Long currentId = BaseContext.getCurrentId();
+        return courseMapper.listCourseByStudent(currentId);
     }
 
     /**

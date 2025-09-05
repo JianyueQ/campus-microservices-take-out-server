@@ -9,6 +9,7 @@ import com.ccr.result.Result;
 import com.ccr.service.CourseService;
 import com.ccr.vo.CollegeMajorTreeVO;
 import com.ccr.vo.CourseDetailVO;
+import com.ccr.vo.CourseListVO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,5 +121,14 @@ public class CourseManagementController {
         log.info("删除课程:{}", ids);
         courseService.deleteCourse(ids);
         return Result.success();
+    }
+
+    /**
+     * 获取课程树形列表
+     */
+    @GetMapping("/courseList")
+    public Result<List<CourseListVO>> listCourse() {
+        log.info("获取课程列表");
+        return Result.success(courseService.listCourse());
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author 31373
  */
 @Component
-@ConfigurationProperties(prefix = "ccr.alioss")
+@ConfigurationProperties(prefix = "cm.alioss")
 @Data
 public class AliOssProperties {
 

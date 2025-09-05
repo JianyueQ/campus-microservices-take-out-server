@@ -25,15 +25,6 @@ public class StudentManagementController {
     private StudentManagementService studentManagementService;
 
     /**
-     * 获取课程列表
-     */
-    @GetMapping("/course/list")
-    public Result<List<CourseListVO>> listCourse() {
-        log.info("获取课程列表");
-        return Result.success(studentManagementService.listCourse());
-    }
-
-    /**
      * 获取学生列表-分页查询
      */
     @GetMapping("/list")

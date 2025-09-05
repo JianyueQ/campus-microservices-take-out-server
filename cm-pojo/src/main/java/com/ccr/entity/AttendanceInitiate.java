@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AttendanceInitiate implements Serializable {
+
     /**
      * 考勤发起ID
      */
@@ -48,16 +49,6 @@ public class AttendanceInitiate implements Serializable {
     private String teacherName;
     
     /**
-     * 班级ID
-     */
-    private Long classId;
-    
-    /**
-     * 班级名称（冗余）
-     */
-    private String className;
-    
-    /**
      * 考勤开始时间
      */
     private LocalDateTime startTime;
@@ -81,21 +72,16 @@ public class AttendanceInitiate implements Serializable {
      * 纬度
      */
     private BigDecimal latitude;
-    
+
     /**
-     * 考勤地点
+     * 考勤密码
      */
-    private String address;
-    
+    private String signInPassword;
+
     /**
-     * 考勤范围（米）
+     * 签到方式
      */
-    private Integer radius;
-    
-    /**
-     * 描述信息
-     */
-    private String description;
+    private Integer signInType;
     
     /**
      * 状态（1:进行中, 2:已结束）

@@ -88,12 +88,6 @@ public interface StudentManagementService {
     ResponseEntity<byte[]> exportStudentAccount(UserWithStudentInfoPageDTO userWithStudentInfoPageDTO);
 
     /**
-     * 教师端获取学生列表
-     * @return PageResult
-     */
-    List<CourseListVO> listCourse();
-
-    /**
      * 获取学生列表-分页查询
      * @param listStudentPageDTO 分页数据
      * @return 学生列表

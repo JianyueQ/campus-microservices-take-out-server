@@ -35,7 +35,10 @@
 
     <select id="getStudentInfoByUserId" resultType="com.ccr.vo.StudentVO">
         select
-            student.student_no,enrollment_year,class.grade,education_level,class.status,
+            student.id,
+            student.student_no,enrollment_year,
+            class.grade,education_level,
+            class.status,
             college.name as collegeName,
             major.name as majorName,
             class.name as className

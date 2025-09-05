@@ -2,10 +2,7 @@ package com.ccr.service;
 
 import com.ccr.dto.*;
 import com.ccr.result.PageResult;
-import com.ccr.vo.CollegeMajorTreeVO;
-import com.ccr.vo.CourseDetailVO;
-import com.ccr.vo.CourseSelectionVO;
-import com.ccr.vo.CoursesNumberVO;
+import com.ccr.vo.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -129,4 +126,17 @@ public interface CourseService {
      * @param cancelCourseSelectionDTO 课程id
      */
     void deleteCourseSelection(CancelCourseSelectionDTO cancelCourseSelectionDTO);
+
+    /**
+     * 获取课程树形列表
+     * @return 课程树形列表
+     */
+    List<CourseListVO> listCourse();
+
+    /**
+     * 获取课程树形列表-学生端
+     * @return 课程树形列表
+     */
+    List<CourseListVO> listCourseByStudent();
+
 }

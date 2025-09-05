@@ -32,7 +32,12 @@ public class AttendanceRecord implements Serializable {
      * 学生ID
      */
     private Long studentId;
-    
+
+    /**
+     * 用户id
+     */
+    private Long userId;
+
     /**
      * 学号（冗余）
      */
@@ -42,7 +47,12 @@ public class AttendanceRecord implements Serializable {
      * 学生姓名（冗余）
      */
     private String studentName;
-    
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
     /**
      * 授课ID
      */
@@ -64,16 +74,6 @@ public class AttendanceRecord implements Serializable {
     private Long teacherId;
     
     /**
-     * 班级ID
-     */
-    private Long classId;
-    
-    /**
-     * 班级名称（冗余）
-     */
-    private String className;
-    
-    /**
      * 签到时间
      */
     private LocalDateTime signInTime;
@@ -92,21 +92,16 @@ public class AttendanceRecord implements Serializable {
      * 签到纬度
      */
     private BigDecimal latitude;
-    
+
     /**
-     * 签到地点
+     * 签到密码
      */
-    private String address;
-    
+    private String signInPassword;
+
     /**
      * 考勤状态（1:已签到, 2:迟到, 3:未签到, 4:请假）
      */
     private Integer status;
-    
-    /**
-     * 备注
-     */
-    private String remark;
     
     /**
      * 创建时间

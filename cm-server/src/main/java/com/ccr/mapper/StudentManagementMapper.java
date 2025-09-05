@@ -158,12 +158,6 @@ public interface StudentManagementMapper {
     Page<StudentExcelVO> exportStudentAccount(UserWithStudentInfoPageDTO userWithStudentInfoPageDTO);
 
     /**
-     * 获取课程树形列表
-     * @return 课程树形列表
-     */
-    List<CourseListVO> listCourse(Long currentId);
-
-    /**
      * 获取学生列表
      *
      * @param listStudentPageDTO 查询条件

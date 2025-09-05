@@ -204,17 +204,7 @@
             and user.is_deleted = 0 and student.is_deleted = 0
         </where>
     </select>
-    <select id="listCourse" resultType="com.ccr.vo.CourseListVO">
-        select course.id, course.name
-        from course
-                 left join course_teaching on course.id = course_teaching.course_id
-        where course_teaching.teacher_id = (select id from teacher where user_id = #{currentId})
-          and course.status = 1
-          and course_teaching.status = 1
-          and course.is_deleted = 0
-          and course_teaching.is_deleted = 0
-        order by course.create_time desc
-    </select>
+
 
     <select id="listStudent" resultType="com.ccr.vo.StudentListVO">
         select user.real_name, user.phone, user.email, student.student_no, user.gender

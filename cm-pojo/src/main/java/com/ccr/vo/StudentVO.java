@@ -15,6 +15,11 @@ import java.io.Serializable;
 public class StudentVO implements Serializable {
 
     /**
+     * 学生ID
+     */
+    private Long id;
+
+    /**
      * 学号
      */
     private String studentNo;

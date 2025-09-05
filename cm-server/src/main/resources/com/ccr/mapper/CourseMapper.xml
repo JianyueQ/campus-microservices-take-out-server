@@ -188,6 +188,12 @@
         and student_id = (select id from student where user_id = #{userId})
     </delete>
 
+    <update id="deleteCourseSelectionByCourseId">
+        update course_selection
+        set is_deleted = 1
+        where course_id = #{courseId}
+    </update>
+
     <select id="pageQuery" resultType="com.ccr.vo.CoursePageVO">
         SELECT
         course.id, course.course_code, course.name, course.description, course.theory_hours, course.practice_hours,
@@ -288,16 +294,17 @@
         <foreach item="item" index="index" collection="list" separator="," open="(" close=")">
             #{item}
         </foreach>
+        and is_deleted = 0
     </select>
 
     <select id="detail" resultMap="detailResult">
         select id, course_code, name, description, theory_hours, practice_hours, total_hours, course_type, assessment_type, status, selection_start_time, selection_end_time
             from course
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </select>
     <select id="getCourseTeachingDetail" resultType="com.ccr.vo.CourseTeachingVO">
         select id, course_id, teacher_id, semester,max_student_count, current_student_count, schedule_info,(select group_concat(name separator ',') from class where find_in_set(id, course_teaching.class_ids) and is_deleted = 0) as className
-        from course_teaching where course_id = #{id}
+        from course_teaching where course_id = #{id} and is_deleted = 0
     </select>
 
     <select id="getUserById" resultMap="getUserByIdResult">
@@ -404,6 +411,28 @@
         where
             student_id = (select id from student where user_id = #{currentId}) and status = 1 and is_deleted = 0
             and create_time &gt;= #{startTime} and create_time &lt;= #{endTime}
+    </select>
+    <select id="listCourse" resultType="com.ccr.vo.CourseListVO">
+        select course.id, course.name
+        from course
+                 left join course_teaching on course.id = course_teaching.course_id
+        where course_teaching.teacher_id = (select id from teacher where user_id = #{currentId})
+          and course.status = 1
+          and course_teaching.status = 1
+          and course.is_deleted = 0
+          and course_teaching.is_deleted = 0
+        order by course.create_time desc
+    </select>
+    <select id="listCourseByStudent" resultType="com.ccr.vo.CourseListVO">
+        select course.id, course.name
+        from course
+                 left join course_selection on course.id = course_selection.course_id
+        where course_selection.student_id = (select id from student where user_id = #{currentId})
+          and course.status = 1
+          and course.is_deleted = 0
+          and course_selection.is_deleted = 0
+          and course_selection.status = 1
+        order by course.create_time desc
     </select>
 
     <update id="deleteCourse">
