@@ -36,4 +36,8 @@ public class TypeConstant {
     public static final Integer LOCATION_CHECK_IN = 1;
     public static final Integer PASSWORD_CHECK_IN = 3;
 
+    /**
+     * 资源
+     */
+    public static final Integer RESOURCE_TYPE_FOLDER = 5;
 }

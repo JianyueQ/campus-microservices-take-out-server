@@ -434,6 +434,16 @@
           and course_selection.status = 1
         order by course.create_time desc
     </select>
+    <select id="listCourseByAdmin" resultType="com.ccr.vo.CourseListVO">
+        select course.id, course.name
+        from course
+                 left join course_teaching on course.id = course_teaching.course_id
+        where course.status = 1
+          and course_teaching.status = 1
+          and course.is_deleted = 0
+          and course_teaching.is_deleted = 0
+        order by course.create_time desc
+    </select>
 
     <update id="deleteCourse">
         UPDATE course SET is_deleted = 1 WHERE id IN

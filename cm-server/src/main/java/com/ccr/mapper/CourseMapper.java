@@ -227,4 +227,12 @@ public interface CourseMapper {
      * @return 学生课程列表
      */
     List<CourseListVO> listCourseByStudent(Long currentId);
+
+    /**
+     * 获取管理员课程列表
+     * @return 管理员课程列表
+     */
+    List<CourseListVO> listCourseByAdmin();
+
+
 }

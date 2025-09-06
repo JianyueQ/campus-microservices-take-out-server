@@ -139,4 +139,10 @@ public interface CourseService {
      */
     List<CourseListVO> listCourseByStudent();
 
+    /**
+     * 获取课程树形列表-管理员端
+     * @return 课程树形列表
+     */
+    List<CourseListVO> adminListCourse();
+
 }

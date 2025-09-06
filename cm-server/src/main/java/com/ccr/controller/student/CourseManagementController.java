@@ -88,4 +88,5 @@ public class CourseManagementController {
         log.info("获取课程列表");
         return Result.success(courseService.listCourseByStudent());
     }
+
 }

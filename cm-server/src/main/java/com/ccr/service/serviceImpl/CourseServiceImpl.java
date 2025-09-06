@@ -534,6 +534,11 @@ public class CourseServiceImpl implements CourseService {
         return courseMapper.listCourseByStudent(currentId);
     }
 
+    @Override
+    public List<CourseListVO> adminListCourse() {
+        return courseMapper.listCourseByAdmin();
+    }
+
     /**
      * 根据课程ID列表筛选数据
      *
