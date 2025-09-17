@@ -47,11 +47,6 @@ public class PasswordSignInStrategy implements SignInStrategy {
         if (existingRecord != null && !existingRecord.getStatus().equals(StatusConstant.ATTENDANCE_STATUS_NOT_SIGN_IN)) {
             throw new ParametersQuestionException(ParametersQuestionConstant.ATTENDANCE_ALREADY_SIGN_IN);
         }
-
-        if (attendanceSignInDTO.getSignInStatus() != 3){
-            //已签到
-            throw new ParametersQuestionException(ParametersQuestionConstant.ATTENDANCE_ALREADY_SIGN_IN);
-        }
         String password = redisTemplate.opsForValue().get(RedisConstant.ATTENDANCE_VERIFICATION_KEY + attendanceSignInDTO.getCourseId());
         if (password == null) {
             //签到已经过期

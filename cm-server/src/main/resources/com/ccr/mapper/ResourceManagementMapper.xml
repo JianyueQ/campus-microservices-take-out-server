@@ -25,17 +25,17 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
-            <if test="title != null">#{title},</if>
-            <if test="description != null">#{description},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="description != null and description != ''">#{description},</if>
             <if test="resourceType != null">#{resourceType},</if>
-            <if test="fileUrls != null">#{fileUrls},</if>
-            <if test="fileNames != null">#{fileNames},</if>
-            <if test="fileSizes != null">#{fileSizes},</if>
+            <if test="fileUrls != null and fileUrls != ''">#{fileUrls},</if>
+            <if test="fileNames != null and fileNames != ''">#{fileNames},</if>
+            <if test="fileSizes != null and fileSizes != ''">#{fileSizes},</if>
             <if test="courseId != null">#{courseId},</if>
-            <if test="courseName != null">#{courseName},</if>
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
             <if test="parentId != null">#{parentId},</if>
             <if test="uploaderId != null">#{uploaderId},</if>
-            <if test="uploaderName != null">#{uploaderName},</if>
+            <if test="uploaderName != null and uploaderName != ''">#{uploaderName},</if>
             <if test="downloadCount != null">#{downloadCount},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>

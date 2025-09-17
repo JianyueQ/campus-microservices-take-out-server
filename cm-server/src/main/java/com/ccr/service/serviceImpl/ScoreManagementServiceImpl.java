@@ -71,6 +71,12 @@ public class ScoreManagementServiceImpl implements ScoreManagementService {
 
     @Override
     public void updateGrade(GradeAddDTO gradeAddDTO) {
+        //先查询是否有成绩信息,如果没有则抛出校验异常
+        GradeVO gradeVO = scoreManagementMapper.getGradeByCourseAndStudent(gradeAddDTO.getCourseId(), gradeAddDTO.getStudentId());
+        if (gradeVO == null){
+            //"该学生不存在该课程的记录"
+            throw new ParametersQuestionException(ParametersQuestionConstant.STUDENT_NOT_EXIST_COURSE_RECORD);
+        }
         Grade grade = new Grade();
         BeanUtils.copyProperties(gradeAddDTO, grade);
         scoreManagementMapper.updateGrade(grade);

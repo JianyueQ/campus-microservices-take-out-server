@@ -342,17 +342,17 @@
 
     <select id="pageQueryByStudent" resultType="com.ccr.vo.StudentCoursePageVO">
         select course.id,
-               course.course_code,
-               course.name,
-               course.course_type,
-               course.assessment_type,
-               course_teaching.schedule_info,
-               user.real_name as teacherName,
-               course_teaching.semester
+        course.course_code,
+        course.name,
+        course.course_type,
+        course.assessment_type,
+        course_teaching.schedule_info,
+        user.real_name as teacherName,
+        course_teaching.semester
         from course
-                 left join course_teaching on course.id = course_teaching.course_id
-                 left join teacher on course_teaching.teacher_id = teacher.id
-                 left join user on teacher.user_id = user.id
+        left join course_teaching on course.id = course_teaching.course_id
+        left join teacher on course_teaching.teacher_id = teacher.id
+        left join user on teacher.user_id = user.id
         <where>
             <if test="name != null and name != ''">
                 AND course.name LIKE CONCAT('%', #{name}, '%')
@@ -360,8 +360,11 @@
             <if test="courseType != null">
                 AND course.course_type = #{courseType}
             </if>
-            <if test="semester != null and semester != ''"> AND course_teaching.semester like CONCAT('%', #{semester}, '%')</if>
-            and course.status = 1 and course_teaching.status = 1 and selection_end_time  &gt;= #{now} and selection_start_time &lt;= #{now} and course_type != 1
+            <if test="semester != null and semester != ''">AND course_teaching.semester like CONCAT('%', #{semester},
+                '%')
+            </if>
+            and course.status = 1 and course_teaching.status = 1 and selection_end_time &gt;= #{now} and
+            selection_start_time &lt;= #{now} and course_type != 1 and course.is_deleted = 0 and course_teaching.is_deleted = 0
         </where>
     </select>
     <select id="getAllActiveCourseSelectionCount" resultType="com.ccr.vo.CoursesNumberVO">
@@ -423,6 +426,7 @@
           and course_teaching.is_deleted = 0
         order by course.create_time desc
     </select>
+
     <select id="listCourseByStudent" resultType="com.ccr.vo.CourseListVO">
         select course.id, course.name
         from course
@@ -434,6 +438,7 @@
           and course_selection.status = 1
         order by course.create_time desc
     </select>
+
     <select id="listCourseByAdmin" resultType="com.ccr.vo.CourseListVO">
         select course.id, course.name
         from course

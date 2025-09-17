@@ -43,4 +43,9 @@ public class StudentLoginDTO implements Serializable {
     @NotNull(message = "uuid不能为空")
     private String uuid;
 
+    /**
+     * 验证码标识
+     */
+    private String flag;
+
 }

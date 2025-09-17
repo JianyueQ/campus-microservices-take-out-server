@@ -4,7 +4,7 @@ FROM openeuler-jdk17:24.03
 # 拷贝构建好的 sky-server jar 包到容器中
 COPY cm-server-1.0-SNAPSHOT.jar ccr.jar
 
-#设置oss的密钥id和密钥到环境变量
+#todo 设置oss的密钥id和密钥到环境变量
 ENV  ALIBABA_CLOUD_ACCESS_KEY_ID=L
 ENV  ALIBABA_CLOUD_ACCESS_KEY_SECRET=F
 

@@ -78,5 +78,10 @@ public class ParametersQuestionConstant {
     public static final String ATTENDANCE_EXPIRED = "签到已过期";
     public static final String ATTENDANCE_PASSWORD_ERROR = "签到密码错误";
     public static final String ATTENDANCE_ALREADY_SIGN_IN = "已签到";
+
+    /**
+     * 成绩校验
+     */
     public static final String STUDENT_EXIST_COURSE_RECORD = "该学生已存在课程成绩";
+    public static final String STUDENT_NOT_EXIST_COURSE_RECORD = "该学生不存在课程成绩,无法修改";
 }
